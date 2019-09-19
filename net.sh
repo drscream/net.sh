@@ -171,7 +171,7 @@ __dns() {
 				echo nameserver ${value}
 			fi
 		fi
-	done | ${ROOT} tee /etc/resolver.conf >/dev/null
+	done | ${ROOT} tee /etc/resolv.conf >/dev/null
 	unset resolver value
 }
 
