@@ -154,6 +154,7 @@ __wlan_new() {
 			wpa_cli set_network ${network_id} key_mgmt NONE
 		fi
 		wpa_cli set_network ${network_id} ssid "\"${ssid}\""
+		wpa_cli select_network ${network_id}
 		wpa_cli save_config
 	fi
 	unset selected ssid network_id passphrase
@@ -162,6 +163,7 @@ __wlan_new() {
 __dns() {
 	for resolver in ${RESOLVERS}; do
 		if echo ${resolver} | grep -qe "^${1}"; then
+			echo '# Managed by net.sh'
 			value=$(echo ${resolver} | gsed 's/\(.*\):\(.*\)/\2/g')
 			if [ "${value}" == "0.0.0.0" ]; then
 				resolvconf -l
@@ -169,7 +171,7 @@ __dns() {
 				echo nameserver ${value}
 			fi
 		fi
-	done | ${ROOT} tee /etc/res >/dev/null
+	done | ${ROOT} tee /etc/resolver.conf >/dev/null
 	unset resolver value
 }
 
